@@ -8,6 +8,7 @@ const service = axios.create(config)
 // POST 传参序列化
 service.interceptors.request.use(
   config => {
+    console.log('datra:', config)
     return config
   },
   error => {

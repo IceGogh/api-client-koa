@@ -1,0 +1,270 @@
+<template>
+  <div id="params">
+    <div class="url-area">
+      <div class="method">{{methodType}}</div>
+      <input type="text" v-model="queryUrl" >
+      <div class="send" @click="sendFn">
+        <span>发送</span>
+        <!-- <i class="ns-font ns-tubiaozhizuomoban"></i> -->
+      </div>
+    </div>
+    <div class="option-area">
+      <div class="title">
+        <span :class="{selected: headerSelectStatus }" @click="selectOpt('headerSelectStatus')">Header</span>
+        <span :class="{selected: bodySelectStatus }" @click="selectOpt('bodySelectStatus')">Body</span>
+        <div class="add-btn">
+          <span v-if="headerSelectStatus" @click="addOpt('headersArr')">add header</span>
+          <span v-if="bodySelectStatus" @click="addOpt('paramsArr')">add body</span>
+        </div>
+      </div>
+      <div class="param">
+        <div class="item clearfix" v-for="(item,key) in paramsArr" :key="key">
+          <i class="ns-font ns-require-true" :class="{ opacity0: !item.require }"></i>
+          <i class="ns-font ns-wenhao" @click="showName(item.comment)"></i>
+          <span class="type">{{item.type}}</span>
+          <div class="keyin">
+            <span class="key">Key</span>
+            <input type="text" v-model="item.name">
+            <span class="value">Value</span>
+            <input type="text" v-model="item.default">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="response-area">
+      <div class="title">
+        <span>Response</span>
+      </div>
+      <div class="response-data">
+        <pre v-if="responseData">{{responseData}}</pre>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { rewrite_api } from '~/api/methods'
+export default {
+  data() {
+    return {
+      queryUrl: 'http://127.0.0.2/ajax.php',
+      methodType: 'post',
+      headerSelectStatus: false,
+      bodySelectStatus: true,
+      paramsArr: [],
+      headersArr: [],
+      responseData: ''
+    }
+  },
+  beforeMount() {
+  },
+  watch: {
+    api(v) {
+      if (v) {
+      }
+    }
+  },
+  mounted() {
+  },
+  beforeDestroy() {
+  },
+  methods: {
+    clearFn() {
+      this.paramsArr = []
+      this.responseData = ''
+    },
+    addOpt(arr) {
+      this[arr] = this[arr].concat([{
+        comment: '',
+        default: '',
+        name: '',
+        require: false,
+        type: 'string'
+      }])
+    },
+    selectOpt(type) {
+      this[type] = !this[type]
+    },
+    queryCmd(api) {
+    },
+    sendFn() {
+      console.log(this.queryUrl)
+      rewrite_api(this.queryUrl, { name: 'name from page' }).then(s => {
+        this.responseData = s
+      }).catch(e => {})
+    },
+    showName(message) {
+    }
+  }
+}
+</script>
+
+<style lang="scss">
+@import '~/assets/scss/base.scss';
+.ns-require-true {
+  color: red;
+}
+.ns-wenhao {
+  color: rgb(240, 240, 32);
+}
+#params {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 340px);
+  height: 100vh;
+  float: left;
+  background: #fff;
+  padding: 40px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  > div {
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0px 3px 15px 0px rgba(194, 196, 237, 0.4);
+    border-radius: 3px;
+  }
+  > .url-area {
+    height: 40px;
+    margin-bottom: 40px;
+    .method {
+      width: 80px;
+      height: 40px;
+      line-height: 40px;
+      color: #cdca32;
+      text-align: center;
+      float: left;
+    }
+    input {
+      display: block;
+      float: left;
+      width: calc(100% - 180px);
+      height: 40px;
+      line-height: 40px;
+      color: #666;
+      border: 0;
+    }
+    .send {
+      float: right;
+      width: 100px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+      background: #409eff;
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      span {
+        display: inline-block;
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+      }
+      i {
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+        color: rgb(149, 208, 212);
+      }
+    }
+  }
+  > .option-area {
+    min-height: 240px;
+    overflow-y: auto;
+    margin-bottom: 40px;
+    > .title {
+      height: 40px;
+      line-height: 40px;
+      font-size: 14px;
+      border-bottom: 2px solid #f0f0f0;
+      span {
+        display: inline-block;
+        padding: 0 12px;
+        cursor: pointer;
+      }
+      .selected {
+        color: rgb(240, 240, 32);
+        font-weight: 500;
+      }
+      .add-btn {
+        height: 40px;
+        float: right;
+      }
+    }
+    > .param {
+      padding: 30px;
+      .item {
+        margin-bottom: 4px;
+      }
+      i {
+        display: block;
+        float: left;
+        height: 30px;
+        line-height: 30px;
+        width: 20px;
+      }
+      .ns-wenhao {
+        cursor: pointer;
+      }
+      .type {
+        width: 50px;
+        height: 30px;
+        line-height: 30px;
+        display: block;
+        float: left;
+        text-transform: capitalize;
+        font-style: italic;
+        color: #f47023;
+      }
+      .keyin {
+        float: left;
+        width: calc(100% - 110px);
+        span,
+        input {
+          display: block;
+          float: left;
+          height: 30px;
+          line-height: 30px;
+        }
+        span {
+          text-align: right;
+          width: 50px;
+          color: #bdbdbd;
+          margin-left: 10px;
+        }
+        input {
+          margin-left: 10px;
+          border-bottom: 1px solid rgb(247, 243, 243);
+          width: calc(50% - 105px);
+          color: #666;
+          text-indent: 10px;
+        }
+      }
+    }
+  }
+  > .response-area {
+    > .title {
+      height: 40px;
+      line-height: 40px;
+      font-size: 14px;
+      border-bottom: 2px solid #f0f0f0;
+      span {
+        display: inline-block;
+        padding: 0 12px;
+        font-size: 18px;
+        font-weight: 600;
+        color: rgba(189, 189, 189, 1);
+      }
+    }
+    .response-data {
+      min-height: 220px;
+      overflow-y: auto;
+    }
+    pre {
+      display: block;
+      padding: 20px;
+      color: #666;
+      line-height: 20px;
+      font-size: 14px;
+    }
+  }
+}
+</style>

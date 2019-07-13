@@ -33,3 +33,11 @@ export const request_api = async (cmd, data, method = 'post') => {
     data
   })
 }
+
+export const rewrite_api = async (url, data, method = 'post') => {
+  return await commonFetch({
+    url: `/rewrite/${url}`,
+    data,
+    method
+  })
+}

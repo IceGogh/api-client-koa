@@ -1,0 +1,37 @@
+.transition500 {
+  transition: all .5s;
+}
+
+.clearfix:after {
+  content: '';
+  font-size: 0;
+  height: 0;
+  display: block;
+  clear: both;
+}
+
+.opacity05 {
+  opacity: .5
+}
+.opacity0 {
+  opacity: 0;
+}
+
+.disable-select {
+  -moz-user-select:none;
+  -webkit-user-select:none;
+  user-select:none;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: inset 0 0 1px rgba(136, 136, 136, 0.3);
+  background-color: rgba(136, 136, 136, 0.3);
+}
+
+$selectColor: rgb(128, 241, 93);
+$sideBarWt: 140px;
+$secondBarWt: 200px;
