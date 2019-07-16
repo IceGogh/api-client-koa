@@ -59,12 +59,18 @@ import { rewrite_api } from '~/api/methods'
 export default {
   data() {
     return {
-      queryUrl: 'http://127.0.0.2/ajax.php',
-      methodType: 'post',
+      // queryUrl: 'http://127.0.0.2/ajax.php',
+      queryUrl: 'http://localhost:9998',
+      methodType: 'POST',
       headerSelectStatus: false,
       bodySelectStatus: true,
-      paramsArr: [],
+      paramsArr: [
+        { name: 'p1', default: '1111' },
+        { name: 'p2', default: '1222' }
+      ],
       headersArr: [
+        { name: 'h1', default: 'h1' },
+        { name: 'h2', default: 'g2' }
       ],
       responseData: ''
     }
@@ -106,7 +112,7 @@ export default {
       this.headersArr.forEach(e => {
         if (e['name']) {
           Object.assign(headers, {
-            [e['name']]: e['default']
+            ['designX-' + e['name']]: e['default']
           })
         }
       })
@@ -120,7 +126,7 @@ export default {
       const d = JSON.stringify({
         headers, params
       })
-      rewrite_api(this.queryUrl, d).then(s => {
+      rewrite_api(this.queryUrl, d, this.methodType).then(s => {
         this.responseData = s
       }).catch(e => {})
     },

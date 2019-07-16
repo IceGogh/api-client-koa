@@ -22,33 +22,63 @@ config.dev = !(app.env === 'production');
   app.use(async(ctx, next) => {
     if (ctx.request.path.startsWith('/rewrite')) {
       const url = ctx.request.path.substr(9)
+      const headers = {
+        'content-type': 'application/x-www-form-urlencoded'
+      }
+      const h = ctx.request.header
+      for (const i in h) {
+        if (i.startsWith('designx-')) {
+          headers[i.substr(8)] = h[i]
+        }
+      }
       if (url.startsWith('http')) {
         const s = new Promise((resolve, reject) => {
-          let str = ''
-          ctx.req.on('data', data => {
-            str += data
-          })
-          ctx.req.on('end', () => {
-            const requestData = JSON.parse(str)
+          if (ctx.request.method === 'POST') {
+            let str = ''
+            ctx.req.on('data', data => {
+              str += data
+            })
+            ctx.req.on('end', () => {
+              const requestData = JSON.parse(str)
+              request({
+                url,
+                headers,
+                method: 'post',
+                body: queryString.stringify(requestData)
+              }, (err, response, data) => {
+                if (err) {
+                  console.log('err: ', err)
+                  resolve({
+                    err: 1,
+                    errMsg: 'request err'
+                  })
+                } else {
+                  resolve(data)
+                }
+              })
+            })
+          } else if (ctx.request.method === 'GET') {
             request({
               url,
-              method: 'post',
-              headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-              },
-              body: queryString.stringify(requestData)
+              headers,
+              method: 'get'
             }, (err, response, data) => {
               if (err) {
-                console.log('err: ', err)
+                console.log('get err: ', err)
                 resolve({
                   err: 1,
-                  errMsg: 'request err'
+                  errMsg: 'request err..'
                 })
               } else {
                 resolve(data)
               }
             })
-          })
+          } else {
+            resolve({
+              err: 1,
+              errMsg: 'request method unsupporte !'
+            })
+          }
         })
         ctx.response.body = await s
       } else {

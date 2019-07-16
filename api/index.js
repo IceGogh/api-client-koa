@@ -1,5 +1,6 @@
 import axios from 'axios'
 import config from './config'
+import queryString from 'querystring'
 if (process.server) {
   axios.defaults.baseURL = `http://${process.env.HOST}:${process.env.PORT}`
 }
@@ -8,7 +9,11 @@ service.interceptors.request.use(
   config => {
     const { headers, params } = JSON.parse(config.data)
     config.headers = headers
-    config.data = params
+    if (config.method === 'post') {
+      config.data = params
+    } else if (config.method === 'get' && params) {
+      config.url += ('?' + queryString.stringify(params))
+    }
     console.log('config:', config)
     return config
   },

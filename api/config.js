@@ -4,7 +4,7 @@ import https from 'https'
 export default {
   // 自定义的请求头
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/x-www-form-urlencoded'
   },
   // 超时设置
   timeout: 60000 * 4,
