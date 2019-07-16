@@ -4,11 +4,12 @@ if (process.server) {
   axios.defaults.baseURL = `http://${process.env.HOST}:${process.env.PORT}`
 }
 const service = axios.create(config)
-
-// POST 传参序列化
 service.interceptors.request.use(
   config => {
-    console.log('datra:', config)
+    const { headers, params } = JSON.parse(config.data)
+    config.headers = headers
+    config.data = params
+    console.log('config:', config)
     return config
   },
   error => {

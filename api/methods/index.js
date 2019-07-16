@@ -26,10 +26,11 @@ export const api_desc = async data => {
 }
 
 // request
-export const request_api = async (cmd, data, method = 'post') => {
+export const request_api = async (cmd, data, header, method = 'post') => {
   return await commonFetch({
     url: `/proxy/${cmd}`,
     method,
+    header,
     data
   })
 }

@@ -18,7 +18,19 @@
         </div>
       </div>
       <div class="param">
-        <div class="item clearfix" v-for="(item,key) in paramsArr" :key="key">
+        <div class="item clearfix" v-for="(item,key) in headersArr" :key="'h' + key">
+          <i class="ns-font ns-require-true" :class="{ opacity0: !item.require }"></i>
+          <i class="ns-font ns-wenhao" @click="showName(item.comment)"></i>
+          <span class="type">{{item.type}}</span>
+          <div class="keyin">
+            <span class="key">Key</span>
+            <input type="text" v-model="item.name">
+            <span class="value">Value</span>
+            <input type="text" v-model="item.default">
+          </div>
+        </div>
+        <hr>
+        <div class="item clearfix" v-for="(item,key) in paramsArr" :key="'p' + key">
           <i class="ns-font ns-require-true" :class="{ opacity0: !item.require }"></i>
           <i class="ns-font ns-wenhao" @click="showName(item.comment)"></i>
           <span class="type">{{item.type}}</span>
@@ -52,7 +64,8 @@ export default {
       headerSelectStatus: false,
       bodySelectStatus: true,
       paramsArr: [],
-      headersArr: [],
+      headersArr: [
+      ],
       responseData: ''
     }
   },
@@ -88,8 +101,26 @@ export default {
     queryCmd(api) {
     },
     sendFn() {
-      console.log(this.queryUrl)
-      rewrite_api(this.queryUrl, { name: 'name from page' }).then(s => {
+      const headers = {}
+      const params = {}
+      this.headersArr.forEach(e => {
+        if (e['name']) {
+          Object.assign(headers, {
+            [e['name']]: e['default']
+          })
+        }
+      })
+      this.paramsArr.forEach(e => {
+        if (e['name']) {
+          Object.assign(params, {
+            [e['name']]: e['default']
+          })
+        }
+      })
+      const d = JSON.stringify({
+        headers, params
+      })
+      rewrite_api(this.queryUrl, d).then(s => {
         this.responseData = s
       }).catch(e => {})
     },

@@ -38,7 +38,6 @@ config.dev = !(app.env === 'production');
               },
               body: queryString.stringify(requestData)
             }, (err, response, data) => {
-              console.log('response: ', typeof response, response)
               if (err) {
                 console.log('err: ', err)
                 resolve({

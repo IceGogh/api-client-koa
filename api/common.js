@@ -6,5 +6,6 @@ export function commonFetch (req) {
     req['params'] = {}
   }
   const tempRequest = JSON.parse(JSON.stringify(req))
+  console.log('tempRequest: ', tempRequest)
   return request(tempRequest)
 }
