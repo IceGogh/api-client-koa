@@ -3,7 +3,7 @@ const request = require('request')
 const queryString = require('querystring')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
-
+const logger = require('../logger')
 const app = new Koa()
 
 const config = require('../nuxt.config.js')
@@ -32,6 +32,10 @@ config.dev = !(app.env === 'production');
         }
       }
       if (url.startsWith('http')) {
+        logger.trace({
+          url,
+          headers
+        })
         const s = new Promise((resolve, reject) => {
           if (ctx.request.method === 'POST') {
             let str = ''
