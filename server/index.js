@@ -20,6 +20,9 @@ config.dev = !(app.env === 'production');
     await nuxt.ready()
   }
   app.use(async(ctx, next) => {
+    logger.trace({
+      requestPath: ctx.request.path
+    })
     if (ctx.request.path.startsWith('/rewrite')) {
       const url = ctx.request.path.substr(9)
       const headers = {
