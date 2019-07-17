@@ -20,9 +20,7 @@ config.dev = !(app.env === 'production');
     await nuxt.ready()
   }
   app.use(async(ctx, next) => {
-    logger.trace({
-      requestPath: ctx.request.path
-    })
+    console.log('path?:', ctx.request.path)
     if (ctx.request.path.startsWith('/rewrite')) {
       const url = ctx.request.path.substr(9)
       const headers = {
@@ -34,7 +32,8 @@ config.dev = !(app.env === 'production');
           headers[i.substr(8)] = h[i]
         }
       }
-      if (url.startsWith('http')) {
+      console.log('url?:', url)
+      if (url.startsWith('http') && url.indexOf('http://127.') === -1) {
         logger.trace({
           url,
           headers
@@ -60,6 +59,10 @@ config.dev = !(app.env === 'production');
                     errMsg: 'request err'
                   })
                 } else {
+                  logger.trace({
+                    method: 'POST',
+                    data
+                  })
                   resolve(data)
                 }
               })
@@ -77,6 +80,10 @@ config.dev = !(app.env === 'production');
                   errMsg: 'request err..'
                 })
               } else {
+                logger.trace({
+                  method: 'GET',
+                  data
+                })
                 resolve(data)
               }
             })
@@ -89,10 +96,16 @@ config.dev = !(app.env === 'production');
         })
         ctx.response.body = await s
       } else {
-        await next()
+        ctx.response.body = {
+          err: 1,
+          errMsg: '404'
+        }
       }
     } else {
-      await next()
+      ctx.response.body = {
+        err: 1,
+        errMsg: '403'
+      }
     }
   })
 
