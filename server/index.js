@@ -20,7 +20,6 @@ config.dev = !(app.env === 'production');
     await nuxt.ready()
   }
   app.use(async(ctx, next) => {
-    console.log('path?:', ctx.request.path)
     if (ctx.request.path.startsWith('/rewrite')) {
       const url = ctx.request.path.substr(9)
       const headers = {
@@ -102,10 +101,7 @@ config.dev = !(app.env === 'production');
         }
       }
     } else {
-      ctx.response.body = {
-        err: 1,
-        errMsg: '403'
-      }
+      await next()
     }
   })
 
