@@ -104,7 +104,7 @@ import { rewrite_api } from '~/api/methods'
 export default {
   data() {
     return {
-      queryUrl: 'https://code.tiankele.cn/ajax.php',
+      queryUrl: 'http://app3.izhjapp.cn/api.php',
       requestStatus: false,
       hoverStatus: '',
       methodType: 'POST',
@@ -113,8 +113,8 @@ export default {
       paramsArr: [
         {
           comment: '',
-          default: 'im tiankele ~~~',
-          name: 'name',
+          default: '',
+          name: '',
           require: false,
           type: 'string'
         }
