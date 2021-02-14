@@ -1,18 +1,19 @@
 module.exports = {
   apps: [
     {
-      name: 'dev-mode',
+      name: 'x-dev-mode',
       script: './server/index.js',
       watch: true,
       env: {
-        'NODE_ENV': 'development'
+        NODE_ENV: 'development'
       }
-    }, {
-      name: 'pro-mode',
-      instances: 2,
+    },
+    {
+      name: 'x-pro-mode',
+      instances: 1,
       script: './server/index.js',
       env: {
-        'NODE_ENV': 'production'
+        NODE_ENV: 'production'
       }
     }
   ]
