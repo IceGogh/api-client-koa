@@ -104,7 +104,7 @@ import { rewrite_api } from '~/api/methods'
 export default {
   data() {
     return {
-      queryUrl: 'http://app3.izhjapp.cn/api.php',
+      queryUrl: '',
       requestStatus: false,
       hoverStatus: '',
       methodType: 'POST',
@@ -195,6 +195,7 @@ export default {
       })
       rewrite_api(this.queryUrl, d, this.methodType)
         .then(s => {
+          console.log('s: ', s)
           this.requestStatus = false
           this.responseData = s
         })

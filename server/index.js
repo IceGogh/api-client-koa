@@ -72,6 +72,7 @@ config.dev = !(app.env === 'production');
               headers,
               method: 'get'
             }, (err, response, data) => {
+              console.log('daa;', typeof data)
               if (err) {
                 console.log('get err: ', err)
                 resolve({
